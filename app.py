@@ -36,7 +36,7 @@ st.markdown("""
         margin-top: 20px;
     }
     </style>
-""", unsafe_gradient=True)
+""", unsafe_allow_html=True)
 
 # 3. Header Aplikasi
 st.title("🎗️ Breast Cancer Prediction Dashboard")
