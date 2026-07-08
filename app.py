@@ -131,3 +131,8 @@ with col_result:
     else:
         # Tampilan standby saat pengguna baru pertama kali membuka web
         st.info("Silakan isi parameter fitur di panel sebelah kiri, lalu klik tombol **Lakukan Prediksi Diagnosis** untuk melihat ringkasan medis hasil analisis.")
+
+# 6. Bagian Footer (Pernyataan Tema & Identitas Hak Cipta)
+st.markdown("---")
+st.caption("© 2026 Breast Cancer Prediction Dashboard — Komputasi Cerdas Deteksi Dini Kanker Payudara dengan SVM")
+st.caption("Sistem ini dikembangkan secara akademis oleh: **ABDUL ROHMAN ALGOFVIQQI SUGIARTO** (NIM: **G.231.21.0177**)")
