@@ -36,7 +36,7 @@ st.markdown("""
         margin-top: 20px;
     }
     </style>
-""", unsafe_allow_html=True)
+""", unsafe_gradient=True)
 
 # 3. Header Aplikasi
 st.title("🎗️ Breast Cancer Prediction Dashboard")
@@ -82,7 +82,7 @@ with col_input:
     # Tombol Prediksi dengan ukuran penuh mengikuti lebar kolom
     predict_btn = st.button("🚀 Lakukan Prediksi Diagnosis", type="primary", use_container_width=True)
 
-# 5. Bagian Kanan (Output Analisis & Keterangan Hasil)
+# 5. Bagian Kanan (Output Analisis & Keterangan Hasil Lengkap)
 with col_result:
     st.subheader("📊 Hasil Analisis")
     
@@ -103,20 +103,36 @@ with col_result:
                     if prediction_val == "1" or "malignant" in prediction_val.lower():
                         st.error("### Hasil: Terindikasi Ganas (Malignant)")
                         
+                        # Menampilkan metrik rincian nilai
                         st.markdown(f"""
+                        **Rincian Output Model:**
+                        * 🔢 **Angka Prediksi (Class):** `{prediction_val}`
+                        * 📋 **Istilah Medis:** Malignant (Kanker Ganas)
+                        * 🎯 **Confidence (Probabilitas):** `{probabilitas:.2%}`
+                        
+                        ---
                         **Keterangan Klinis:** Model mendeteksi karakteristik massa sel yang mengarah pada keganasan (*Malignant*) dengan tingkat keyakinan sebesar **{probabilitas:.2%}**.
                         
-                        ⚠️ **Rekomendasi Tindakan:** * Hasil ini merupakan prediksi awal berdasarkan komputasi sistem cerdas SVM dan **bukan** merupakan diagnosis final medis resmi.
+                        ⚠️ **Rekomendasi Tindakan:** 
+                        * Hasil ini merupakan prediksi awal berdasarkan komputasi sistem cerdas SVM dan **bukan** merupakan diagnosis final medis resmi.
                         * Sangat disarankan untuk segera berkonsultasi dengan Dokter Spesialis Onkologi guna pemeriksaan lebih lanjut seperti Biopsi atau Mammografi ulang.
                         """)
                         
                     else:
                         st.success("### Hasil: Terindikasi Jinak (Benign)")
                         
+                        # Menampilkan metrik rincian nilai
                         st.markdown(f"""
+                        **Rincian Output Model:**
+                        * 🔢 **Angka Prediksi (Class):** `{prediction_val}`
+                        * 📋 **Istilah Medis:** Benign (Tumor Jinak / Non-Kanker)
+                        * 🎯 **Confidence (Probabilitas):** `{probabilitas:.2%}`
+                        
+                        ---
                         **Keterangan Klinis:** Model mendeteksi karakteristik massa sel yang mengarah pada sifat jinak (*Benign*) atau non-kanker dengan tingkat keyakinan sebesar **{probabilitas:.2%}**.
                         
-                        ✅ **Rekomendasi Tindakan:** * Meskipun hasil model menunjukkan indikasi aman, tetap lakukan pemeriksaan payudara sendiri (SADARI) secara berkala.
+                        ✅ **Rekomendasi Tindakan:** 
+                        * Meskipun hasil model menunjukkan indikasi aman, tetap lakukan pemeriksaan payudara sendiri (SADARI) secara berkala.
                         * Jika di kemudian hari Anda merasakan adanya perubahan fisik atau gejala klinis yang janggal, tetap konsultasikan dengan tenaga medis profesional.
                         """)
                     
