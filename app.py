@@ -76,32 +76,37 @@ with col_input:
     predict_btn = st.button("🚀 Lakukan Prediksi Diagnosis", type="primary", use_container_width=True)
 
 # 5. Bagian Kanan (Output Analisis)
-with col_result:
-    st.subheader("📊 Hasil Analisis")
-    
-    if predict_btn:
-        with st.spinner('Menghubungkan ke server model...'):
-            try:
-                url = "https://sipkol.vercel.app/predict"
-                response = requests.post(url, json={"features": inputs}, timeout=10)
-                
-                if response.status_code == 200:
+if response.status_code == 200:
                     hasil = response.json()
+                    prediction_val = str(hasil['prediction']).strip()
+                    probabilitas = hasil['probability']
                     
                     st.markdown('<div class="result-card">', unsafe_allow_html=True)
                     
-                    prediction_text = hasil['prediction']
-                    # Logika warna teks hasil berdasarkan nilai prediksi
-                    if "malignant" in str(prediction_text).lower() or str(prediction_text) == "1":
-                        st.error(f"### Hasil: {prediction_text}")
+                    # --- LOGIKA PENJELASAN KUSTOM ---
+                    if prediction_val == "1" or "malignant" in prediction_val.lower():
+                        st.error("### Hasil: Terindikasi Ganas (Malignant)")
+                        
+                        # Keterangan Tambahan berdasarkan Probabilitas
+                        st.markdown(f"""
+                        **Keterangan Klinis:** Model mendeteksi karakteristik massa sel yang mengarah pada keganasan (*Malignant*) dengan tingkat keyakinan sebesar **{probabilitas:.2%}**.
+                        
+                        ⚠️ **Rekomendasi Tindakan:** * Hasil ini merupakan prediksi awal berdasarkan komputasi SVM dan **bukan** diagnosis final medis.
+                        * Sangat disarankan untuk segera melakukan konsultasi dengan Dokter Spesialis Onkologi untuk pemeriksaan lebih lanjut seperti Biopsi atau Mammografi ulang.
+                        """)
+                        
                     else:
-                        st.success(f"### Hasil: {prediction_text}")
+                        st.success("### Hasil: Terindikasi Jinak (Benign)")
+                        
+                        # Keterangan Tambahan berdasarkan Probabilitas
+                        st.markdown(f"""
+                        **Keterangan Klinis:** Model mendeteksi karakteristik massa sel yang mengarah pada sifat jinak (*Benign*) atau non-kanker dengan tingkat keyakinan sebesar **{probabilitas:.2%}**.
+                        
+                        ✅ **Rekomendasi Tindakan:** * Meskipun hasil model menunjukkan indikasi aman, tetap lakukan pemeriksaan mandiri (SADARI) secara berkala.
+                        * Jika Anda merasakan adanya perubahan fisik atau gejala klinis yang mencurigakan, tetap konsultasikan dengan tenaga medis profesional.
+                        """)
                     
-                    st.metric(label="Tingkat Keyakinan Model (Probability)", value=f"{hasil['probability']:.2%}")
+                    # Menampilkan metrik angka di bagian bawah keterangan
+                    st.divider()
+                    st.metric(label="Tingkat Keyakinan Model (Probability)", value=f"{probabilitas:.2%}")
                     st.markdown('</div>', unsafe_allow_html=True)
-                else:
-                    st.error(f"Gagal mengambil data. Error code: {response.status_code}")
-            except Exception as e:
-                st.error(f"Gagal terhubung ke API: {e}")
-    else:
-        st.info("Isi data di sebelah kiri, lalu klik tombol prediksi untuk memproses.")
