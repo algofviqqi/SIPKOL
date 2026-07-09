@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Aplikasi Web Frontend Streamlit - Breast Cancer Prediction
-Menggunakan model SVM melalui API Backend Vercel
+Sistem Prediksi Dini Kanker Payudara Berbasis Machine Learning
 """
 
 import streamlit as st
@@ -40,7 +40,7 @@ st.markdown("""
 
 # 3. Header Aplikasi
 st.title("🎗️ Breast Cancer Prediction Dashboard")
-st.markdown("Aplikasi diagnosis kanker payudara berbasis *Machine Learning* (Backend: SVM). Silakan isi parameter klinis di bawah ini.")
+st.markdown("Sistem berbasis kecerdasan buatan (*Machine Learning*) untuk mendukung deteksi dan analisis indikasi kanker payudara. Silakan masukkan parameter laboratorium di bawah ini.")
 st.markdown("---")
 
 # 4. Layout Utama (Membagi Halaman: Kiri untuk Input, Kanan untuk Hasil)
@@ -87,7 +87,7 @@ with col_result:
     st.subheader("📊 Hasil Analisis")
     
     if predict_btn:
-        with st.spinner('Menghubungkan ke server model untuk pemrosesan...'):
+        with st.spinner('Sedang memproses data dan menghitung prediksi...'):
             try:
                 url = "https://sipkol.vercel.app/predict"
                 response = requests.post(url, json={"features": inputs}, timeout=10)
@@ -106,16 +106,15 @@ with col_result:
                         # Menampilkan metrik rincian nilai
                         st.markdown(f"""
                         **Rincian Output Model:**
-                        * 🔢 **Angka Prediksi (Class):** `{prediction_val}`
-                        * 📋 **Istilah Medis:** Malignant (Kanker Ganas)
-                        * 🎯 **Confidence (Probabilitas):** `{probabilitas:.2%}`
+                        * 🔢 **Kategori Prediksi:** Kelas `{prediction_val}`
+                        * 📋 **Klasifikasi Medis:** Malignant (Kanker Ganas)
+                        * 🎯 **Akurasi Keyakinan:** `{probabilitas:.2%}`
                         
                         ---
                         **Keterangan Klinis:** Model mendeteksi karakteristik massa sel yang mengarah pada keganasan (*Malignant*) dengan tingkat keyakinan sebesar **{probabilitas:.2%}**.
                         
-                        ⚠️ **Rekomendasi Tindakan:** 
-                        * Hasil ini merupakan prediksi awal berdasarkan komputasi sistem cerdas SVM dan **bukan** merupakan diagnosis final medis resmi.
-                        * Sangat disarankan untuk segera berkonsultasi dengan Dokter Spesialis Onkologi guna pemeriksaan lebih lanjut seperti Biopsi atau Mammografi ulang.
+                        ⚠️ **Rekomendasi Tindakan:** * Hasil ini merupakan analisis awal berbasis algoritma komputasi cerdas (SVM) dan **bukan** merupakan diagnosis final medis resmi.
+                        * Sangat disarankan untuk segera berkonsultasi dengan Dokter Spesialis Onkologi guna pemeriksaan klinis lanjutan seperti Biopsi atau Mammografi.
                         """)
                         
                     else:
@@ -124,16 +123,15 @@ with col_result:
                         # Menampilkan metrik rincian nilai
                         st.markdown(f"""
                         **Rincian Output Model:**
-                        * 🔢 **Angka Prediksi (Class):** `{prediction_val}`
-                        * 📋 **Istilah Medis:** Benign (Tumor Jinak / Non-Kanker)
-                        * 🎯 **Confidence (Probabilitas):** `{probabilitas:.2%}`
+                        * 🔢 **Kategori Prediksi:** Kelas `{prediction_val}`
+                        * 📋 **Klasifikasi Medis:** Benign (Tumor Jinak / Non-Kanker)
+                        * 🎯 **Akurasi Keyakinan:** `{probabilitas:.2%}`
                         
                         ---
                         **Keterangan Klinis:** Model mendeteksi karakteristik massa sel yang mengarah pada sifat jinak (*Benign*) atau non-kanker dengan tingkat keyakinan sebesar **{probabilitas:.2%}**.
                         
-                        ✅ **Rekomendasi Tindakan:** 
-                        * Meskipun hasil model menunjukkan indikasi aman, tetap lakukan pemeriksaan payudara sendiri (SADARI) secara berkala.
-                        * Jika di kemudian hari Anda merasakan adanya perubahan fisik atau gejala klinis yang janggal, tetap konsultasikan dengan tenaga medis profesional.
+                        ✅ **Rekomendasi Tindakan:** * Meskipun hasil analisis menunjukkan indikasi aman, tetap lakukan pemeriksaan payudara sendiri (SADARI) secara berkala sebagai bentuk pencegahan.
+                        * Jika di kemudian hari Anda merasakan adanya perubahan fisik yang mencurigakan, tetap konsultasikan dengan tenaga medis profesional.
                         """)
                     
                     # Menampilkan metrik angka probabilitas secara visual di bawah teks penjelasan
@@ -141,18 +139,18 @@ with col_result:
                     st.metric(label="Tingkat Keyakinan Model (Probability)", value=f"{probabilitas:.2%}")
                     st.markdown('</div>', unsafe_allow_html=True)
                 else:
-                    st.error(f"Gagal mengambil data dari API Vercel. Error code: {response.status_code}")
+                    st.error(f"Gagal memproses data. Silakan coba beberapa saat lagi. (Error: {response.status_code})")
             except Exception as e:
-                st.error(f"Gagal terhubung ke API Backend: {e}")
+                st.error(f"Koneksi terputus: Gagal menghubungkan aplikasi dengan model prediksi.")
     else:
         # Tampilan standby saat pengguna baru pertama kali membuka web
         st.info("Silakan isi parameter fitur di panel sebelah kiri, lalu klik tombol **Lakukan Prediksi Diagnosis** untuk melihat ringkasan medis hasil analisis.")
 
-# 6. Bagian Footer Rata Tengah (Pernyataan Tema & Identitas Hak Cipta)
+# 6. Bagian Footer Rata Tengah (Pernyataan Tema & Identitas Akademik)
 st.markdown("---")
 st.markdown("""
     <div style="text-align: center; color: #6c757d; font-size: 0.85rem; line-height: 1.6;">
-        © 2026 Breast Cancer Prediction Dashboard — Komputasi Cerdas Deteksi Dini Kanker Payudara dengan SVM <br>
-        Sistem ini dikembangkan secara akademis oleh: <strong>ABDUL ROHMAN ALGOFVIQQI SUGIARTO</strong> (NIM: <strong>G.231.21.0177</strong>)
+        © 2026 Breast Cancer Prediction Dashboard — Implementasi Sistem Deteksi Dini Kanker Payudara Berbasis Support Vector Machine (SVM) <br>
+        Sistem ini dikembangkan untuk kepentingan penelitian akademis oleh: <strong>ABDUL ROHMAN ALGOFVIQQI SUGIARTO</strong> NIM <strong>G.231.21.0177</strong>
     </div>
 """, unsafe_allow_html=True)
